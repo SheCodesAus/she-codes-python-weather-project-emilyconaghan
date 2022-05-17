@@ -16,10 +16,8 @@ def format_temperature(temp):
     """
     return f"{temp}{DEGREE_SYBMOL}"
 
-
-# print(format_temperature("32"))
-
 # pass all tests into run tests. If you do run it and call the function - it will be debugging
+
 
 print("new code")
 
@@ -55,6 +53,7 @@ def convert_date(iso_string):
 
     output_iso_day = date(int(str_year), int(
         str_month), int(str_day)).isoweekday()  # interger assigned to day of the week - Mo = 1, Tu=2, We=3, Th=4, Fr=5, Sa=6, Su=7
+
     # output day variables
     if output_iso_day == 1:
         output_day = 'Monday'
@@ -71,8 +70,7 @@ def convert_date(iso_string):
     if output_iso_day == 7:
         output_day = 'Sunday'
 
-       # output month variables
-
+    # output month variables
     if int(str_month) == 1:
         output_month = 'January'
     if int(str_month) == 2:
@@ -99,9 +97,6 @@ def convert_date(iso_string):
         output_month = 'December'
 
     return f"{output_day} {(str_day)} {output_month} {str_year}"
-
-
-# print(convert_date("2021-07-05T07:00:00+08:00"))
 
 
 def convert_f_to_c(temp_in_farenheit):
@@ -141,16 +136,16 @@ def load_data_from_csv(csv_file):
     Returns:
         A list of lists, where each sublist is a (non-empty) line in the csv file.
     """
+
     output = []
     with open(csv_file) as csv_file:
         reader = csv.reader(csv_file)
+        next(reader)
         for line in reader:
-            print(line)
-            output.append(line)
+            if len(line) > 0:
+                output.append([line[0], int(line[1]), int(line[2])])
+
     return output
-
-
-print(load_data_from_csv("tests/data/example_one.csv"))
 
 
 def find_min(weather_data):
@@ -161,6 +156,10 @@ def find_min(weather_data):
     Returns:
         The minium value and it's position in the list.
     """
+
+    if weather_data == []:
+        return ()
+
     min_list = []
 
     for items in weather_data:
@@ -181,10 +180,8 @@ def find_min(weather_data):
         index += 1
 
     output_values = (float(min_value), float(min_location))
+
     return output_values
-
-
-# print(find_min([]))
 
 
 def find_max(weather_data):
@@ -195,6 +192,8 @@ def find_max(weather_data):
     Returns:
         The maximum value and it's position in the list.
     """
+    if weather_data == []:
+        return ()
 
     max_list = []
 
@@ -219,9 +218,6 @@ def find_max(weather_data):
     return output_values
 
 
-# print(find_max([]))
-
-
 def generate_summary(weather_data):
     """Outputs a summary for the given weather data.
 
@@ -230,7 +226,17 @@ def generate_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
+    test = weather_data
+    overview = "5 Day Overview"
+    lowest_output = "The lowest temperature will be X, and will occur on X"
+    highest_output = "The highest temperature will be X and will occur on X"
+    average_low_output = "The average low this week will be X"
+    average_high_output = "The average high this week will be X"
+
+    return f"{overview}\n{lowest_output}{highest_output}{average_low_output}{average_high_output}{test}"
+
+
+print(generate_summary(1))
 
 
 def generate_daily_summary(weather_data):
