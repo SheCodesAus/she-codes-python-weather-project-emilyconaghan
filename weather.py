@@ -16,11 +16,6 @@ def format_temperature(temp):
     """
     return f"{temp}{DEGREE_SYBMOL}"
 
-# pass all tests into run tests. If you do run it and call the function - it will be debugging
-
-
-print("new code")
-
 
 def convert_date(iso_string):
     """Converts and ISO formatted date into a human readable format.
@@ -218,6 +213,9 @@ def find_max(weather_data):
     return output_values
 
 
+print
+
+
 def generate_summary(weather_data):
     """Outputs a summary for the given weather data.
 
@@ -226,17 +224,37 @@ def generate_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    test = weather_data
-    overview = "5 Day Overview"
-    lowest_output = "The lowest temperature will be X, and will occur on X"
-    highest_output = "The highest temperature will be X and will occur on X"
-    average_low_output = "The average low this week will be X"
-    average_high_output = "The average high this week will be X"
+    iso_date = []
+    min_list = []
+    max_list = []
 
-    return f"{overview}\n{lowest_output}{highest_output}{average_low_output}{average_high_output}{test}"
+    for item in weather_data:
+        iso_date.append(item[0])
+        min_list.append(item[1])
+        max_list.append(item[2])
 
+    minimum = find_min(min_list)
+    minimum_c = convert_f_to_c(minimum[0])
+    min_int = int(minimum[1])
 
-print(generate_summary(1))
+    maximum = find_max(max_list)
+    maximum_c = convert_f_to_c(maximum[0])
+    max_int = int(maximum[1])
+
+    average_min = calculate_mean(min_list)
+    average_min_c = convert_f_to_c(average_min)
+    average_max = calculate_mean(max_list)
+    average_max_c = convert_f_to_c(average_max)
+
+    num_overview = len(weather_data)
+
+    overview = f"{num_overview} Day Overview"
+    lowest_output = f"The lowest temperature will be {format_temperature(minimum_c)}, and will occur on {convert_date(iso_date[min_int])}."
+    highest_output = f"The highest temperature will be {format_temperature(maximum_c)}, and will occur on {convert_date(iso_date[max_int])}."
+    average_low_output = f"The average low this week is {format_temperature(average_min_c)}."
+    average_high_output = f"The average high this week is {format_temperature(average_max_c)}."
+
+    return f"{overview}\n  {lowest_output}\n  {highest_output}\n  {average_low_output}\n  {average_high_output}\n"
 
 
 def generate_daily_summary(weather_data):
@@ -247,4 +265,22 @@ def generate_daily_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
-    pass
+    iso_date = []
+    min_list = []
+    max_list = []
+
+    summary_length = len(weather_data)
+
+    for item in weather_data:
+        iso_date.append(item[0])
+        min_list.append(item[1])
+        max_list.append(item[2])
+    index = 0
+    length = len(iso_date)
+    output = ''
+
+    while index < length:
+        output = output + \
+            f"---- {convert_date(iso_date[index])} ----\n  Minimum Temperature: {format_temperature(convert_f_to_c(min_list[index]))}\n  Maximum Temperature: {format_temperature(convert_f_to_c((max_list[index])))}\n\n"
+        index = index + 1
+    return output
