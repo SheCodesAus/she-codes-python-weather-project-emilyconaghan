@@ -26,8 +26,10 @@ def convert_date(iso_string):
         A date formatted like: Weekday Date Month Year e.g. Tuesday 06 July 2021
     """
 
+    # separating out the date elements of the iso date list
     date_list = list(iso_string[0:10])
 
+    # Isolating the year, month and day into separate lists
     year = date_list[0:4]
     month = date_list[5:7]
     day = date_list[8:]
@@ -102,6 +104,8 @@ def convert_f_to_c(temp_in_farenheit):
     Returns:
         A float representing a temperature in degrees celcius, rounded to 1dp.
     """
+    # Using the F to C formula, calculating the celcius value and rounding it to 1 decimal place
+
     temp_in_celcius = (float(temp_in_farenheit) - 32) * (5/9)
     return round(temp_in_celcius, 1)
 
@@ -116,9 +120,12 @@ def calculate_mean(weather_data):
     """
     num_list = []
 
+    # append items from the input into a blank list
     for items in weather_data:
         num_list.append(float(items))
     weather_data = num_list
+
+    # calculate mean by identifying the sum of the list and the length
 
     return sum(weather_data) / len(weather_data)
 
@@ -135,7 +142,9 @@ def load_data_from_csv(csv_file):
     output = []
     with open(csv_file) as csv_file:
         reader = csv.reader(csv_file)
-        next(reader)
+        next(reader)  # skip the first (title) line in the code
+
+        # skip blank lines and append them to the list
         for line in reader:
             if len(line) > 0:
                 output.append([line[0], int(line[1]), int(line[2])])
@@ -151,12 +160,13 @@ def find_min(weather_data):
     Returns:
         The minium value and it's position in the list.
     """
-
+    # return () in the event the list is blank
     if weather_data == []:
         return ()
 
     min_list = []
 
+    # adds items of the input into a blank list
     for items in weather_data:
         min_list.append(float(items))
     weather_data = min_list
@@ -165,6 +175,7 @@ def find_min(weather_data):
     min_location = 0
     index = 0
 
+    # iterates through the list to find the minimum and the location
     for num in weather_data:
         if num < min_value:
             min_value = num
@@ -187,11 +198,14 @@ def find_max(weather_data):
     Returns:
         The maximum value and it's position in the list.
     """
+
+    # return () in the event the list is blank
     if weather_data == []:
         return ()
 
     max_list = []
 
+    # adds items of the input into a blank list
     for items in weather_data:
         max_list.append(float(items))
     weather_data = max_list
@@ -200,6 +214,7 @@ def find_max(weather_data):
     max_location = 0
     index = 0
 
+    # iterates through the list to find the minimum and the location
     for num in weather_data:
         if num > max_value:
             max_value = num
@@ -213,9 +228,6 @@ def find_max(weather_data):
     return output_values
 
 
-print
-
-
 def generate_summary(weather_data):
     """Outputs a summary for the given weather data.
 
@@ -224,30 +236,37 @@ def generate_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
+    # create blank list variables for each element required
     iso_date = []
     min_list = []
     max_list = []
 
+    # create a separate list for each element (dates, minimums, maximum)
     for item in weather_data:
         iso_date.append(item[0])
         min_list.append(item[1])
         max_list.append(item[2])
 
+    # minimum list - use find_min function to identify minimum. convert temp element to celcius. convert location element to integer.
     minimum = find_min(min_list)
     minimum_c = convert_f_to_c(minimum[0])
     min_int = int(minimum[1])
 
+    # maximum list - use find_max function to identify maximum. convert temp element to celcius. convert location element to integer.
     maximum = find_max(max_list)
     maximum_c = convert_f_to_c(maximum[0])
     max_int = int(maximum[1])
 
+    # calculate mean - use calculate_mean to identify mean for both min and max. convert to celcius.
     average_min = calculate_mean(min_list)
     average_min_c = convert_f_to_c(average_min)
     average_max = calculate_mean(max_list)
     average_max_c = convert_f_to_c(average_max)
 
+    # identify the list length for the day overview
     num_overview = len(weather_data)
 
+    # create formats for the output
     overview = f"{num_overview} Day Overview"
     lowest_output = f"The lowest temperature will be {format_temperature(minimum_c)}, and will occur on {convert_date(iso_date[min_int])}."
     highest_output = f"The highest temperature will be {format_temperature(maximum_c)}, and will occur on {convert_date(iso_date[max_int])}."
@@ -265,20 +284,22 @@ def generate_daily_summary(weather_data):
     Returns:
         A string containing the summary information.
     """
+    # create blank list variables for each element required
     iso_date = []
     min_list = []
     max_list = []
 
-    summary_length = len(weather_data)
-
+    # create a separate list for each element (dates, minimums, maximum)
     for item in weather_data:
         iso_date.append(item[0])
         min_list.append(item[1])
         max_list.append(item[2])
+
     index = 0
     length = len(iso_date)
     output = ''
 
+    # iterate through the lists (no matter the length) and apply the data to the output structure. number of iterations is based on length of list. Adds output to an empty string variable
     while index < length:
         output = output + \
             f"---- {convert_date(iso_date[index])} ----\n  Minimum Temperature: {format_temperature(convert_f_to_c(min_list[index]))}\n  Maximum Temperature: {format_temperature(convert_f_to_c((max_list[index])))}\n\n"
