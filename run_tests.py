@@ -9,7 +9,6 @@ from tests.test_generate_summary import GenerateSummaryTests
 from tests.test_generate_daily_summary import GenerateDailySummaryTests
 
 runner = unittest.TextTestRunner()
-
 print("Running Tests...\n")
 runner.run(unittest.TestSuite((unittest.makeSuite(ConvertDateTests))))
 runner.run(unittest.TestSuite((unittest.makeSuite(ConvertTempTests))))
